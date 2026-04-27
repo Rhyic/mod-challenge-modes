@@ -445,18 +445,17 @@ public:
         killed->UpdatePlayerSetting("mod-challenge-modes", HARDCORE_DEAD, 1);
     }
 
-    void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool /*applySickness*/) override
+    void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool& /*applySickness*/) override
     {
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_HARDCORE, player))
         {
             return;
         }
-        // A better implementation is to not allow the resurrect but this will need a new hook added first
+        // A better implementation is to not allow the resurrect but this will need a new hook added first      
         player->UpdatePlayerSetting("mod-challenge-modes", HARDCORE_DEAD, 1);
         player->KillPlayer();
         player->GetSession()->KickPlayer(std::string("极限模式角色已死亡"));
     }
-
     void OnPlayerGiveXP(Player* player, uint32& amount, Unit* victim, uint8 xpSource) override
     {
         ChallengeMode::OnPlayerGiveXP(player, amount, victim, xpSource);
@@ -626,7 +625,7 @@ class ChallengeMode_IronMan : public ChallengeMode
 public:
     ChallengeMode_IronMan() : ChallengeMode("ChallengeMode_IronMan", SETTING_IRON_MAN) {}
 
-    void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool /*applySickness*/) override
+    void OnPlayerResurrect(Player* player, float /*restore_percent*/, bool& /*applySickness*/) override
     {
         if (!sChallengeModes->challengeEnabledForPlayer(SETTING_IRON_MAN, player))
         {
